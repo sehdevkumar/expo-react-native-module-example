@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "settings-pkg": ["../src/index"],
+      "settings-pkg/*": ["../src/*"]
+    }
+  }
+}
