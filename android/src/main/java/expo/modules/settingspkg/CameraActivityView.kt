@@ -53,6 +53,7 @@ private fun killPreviousMainActivity() {
 
         if (isMainActivityRunning) {
             // If the activity is running, finish it
+            Log.d("Killed", "Don't worry")
             appContext.currentActivity?.finish()
         }
     }
@@ -80,7 +81,8 @@ override fun postData(data: OCRData) {
         // val dataMap = convertOCRDataToMap(data)
         onOCRCompleted?.invoke(Unit)
 
-        killPreviousMainActivity()
+
+        // killPreviousMainActivity()
         // Invoke the event with the map data
         Log.d("NowOk", "ok")
     } catch (e: Exception) {

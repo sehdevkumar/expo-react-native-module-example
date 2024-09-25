@@ -20,8 +20,11 @@ class SettingsPkgModule : Module()  {
 
     override fun definition() = ModuleDefinition {
         Name("SettingsPkg")
-         
-
+          
+         Function("hello") {
+            "Hello world! 👋"
+         }
+        
         // Expose the native view to JavaScript
         View(CameraActivityView::class) {
            Events(cameraEvents)

@@ -28,8 +28,6 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.btn_snackbar)
 
-         
-    button.setOnClickListener{
             try {
                 val intent = Intent(this, Class.forName("com.prashd.snacky.TestActivity"))
 
@@ -38,6 +36,8 @@ class MainActivity : AppCompatActivity() {
             } catch (e: ClassNotFoundException) {
                 Log.e("ERROR", "Class not found", e)
             }
+         
+    button.setOnClickListener{
     }
     }
 
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("SignalRegister", "Data being posted: ${data.imageUrl}, ${data.value}")
 
                 SignalRegister.postSignal(data)
+                finish();
                 } catch (e: Exception) {
                 // Log the specific error to understand what's going wrong
                 Log.e("SignalRegisterError", "Error in postSignal: ${e.localizedMessage}", e)
