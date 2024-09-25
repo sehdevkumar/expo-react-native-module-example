@@ -1,2 +1,21 @@
-<manifest>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
+
+<!-- To Support  the lower version -->
+  <uses-sdk android:targetSdkVersion="33" android:minSdkVersion="24"
+            tools:overrideLibrary="com.prashd.snacky"/>
+
+      <application
+        android:allowBackup="true"
+      >
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            
+        </activity>
+    </application>
+
+  
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 </manifest>

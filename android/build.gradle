@@ -8,6 +8,7 @@ apply from: expoModulesCorePlugin
 applyKotlinExpoModulesCorePlugin()
 useCoreDependencies()
 useExpoPublishing()
+// useDefaultAndroidSdkVersions()
 
 // If you want to use the managed Android SDK versions from expo-modules-core, set this to true.
 // The Android SDK versions will be bumped from time to time in SDK releases and may introduce breaking changes in your module code.
@@ -21,12 +22,23 @@ if (useManagedAndroidSdkVersions) {
     ext.safeExtGet = { prop, fallback ->
       rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
     }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
   }
   project.android {
-    compileSdkVersion safeExtGet("compileSdkVersion", 34)
+    compileSdkVersion safeExtGet("compileSdkVersion", 33)
     defaultConfig {
-      minSdkVersion safeExtGet("minSdkVersion", 21)
-      targetSdkVersion safeExtGet("targetSdkVersion", 34)
+      minSdkVersion safeExtGet("minSdkVersion", 29)
+      targetSdkVersion safeExtGet("targetSdkVersion", 33)
+    }
+
+    // Do not remove this
+    // It is very useful to render the external Activity  from library we called it viewBinding
+    viewBinding {
+        enabled = true
     }
   }
 }
@@ -37,7 +49,39 @@ android {
     versionCode 1
     versionName "0.1.0"
   }
+   viewBinding {
+        enabled = true
+    }
   lintOptions {
     abortOnError false
   }
+}
+
+
+dependencies {
+  //  external libraries code
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
+    // Expo Modules Core Dependencies
+    implementation "com.facebook.react:react-native:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.0"
+
+    // Some Core dependencies here
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation "androidx.activity:activity:1.2.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.activity:activity-ktx:1.7.2'
+    implementation 'androidx.fragment:fragment-ktx:1.6.1'
+    implementation 'androidx.databinding:viewbinding:7.0.0'
+    
+    
+    // Example additional libraries dependencies which is loaded from .aar file
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0'
+    implementation 'androidx.navigation:navigation-fragment:2.6.0'  // or the latest version
+    implementation 'androidx.navigation:navigation-ui:2.6.0'  // or the latest version
+
 }

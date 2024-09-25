@@ -1,11 +1,25 @@
-import { requireNativeViewManager } from 'expo-modules-core';
+import { EventEmitter, NativeModulesProxy, requireNativeModule, requireNativeViewManager} from 'expo-modules-core';
 import * as React from 'react';
 
-import { SettingsPkgViewProps } from './SettingsPkg.types';
+import { OCRViewProps } from './SettingsPkg.types';
 
-const NativeView: React.ComponentType<SettingsPkgViewProps> =
+const NativeView: React.ComponentType<OCRViewProps> =
   requireNativeViewManager('SettingsPkg');
 
-export default function SettingsPkgView(props: SettingsPkgViewProps) {
-  return <NativeView {...props} />;
+
+export default function SettingsPkgView(props: OCRViewProps) {
+  
+
+  const { onOCRCompleted, ...otherProps } = props;
+  
+  
+
+    return <NativeView 
+        {...otherProps}
+        onOCRCompleted={(d)=> {
+          if(props?.onOCRCompleted)
+           props?.onOCRCompleted(d)
+        }}
+       // Remove this prop from native view
+    />;
 }

@@ -1,7 +1,9 @@
-export type ChangeEventPayload = {
-  value: string;
-};
 
-export type SettingsPkgViewProps = {
-  name: string;
+export type OCRData = {
+    imagePath: String
+    value: String
+}
+
+export type OCRViewProps = {
+  onOCRCompleted?: (data?: OCRData)=>void
 };
