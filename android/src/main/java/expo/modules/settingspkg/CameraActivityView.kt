@@ -18,7 +18,7 @@ import expo.modules.settingspkg.SignalRegister
 import expo.modules.settingspkg.EmitSignal
 import expo.modules.settingspkg.OCRData
 import expo.modules.kotlin.events.EventEmitter
-
+import android.app.ActivityManager
 
 import com.prashd.snacky.Snacky
 
@@ -35,19 +35,32 @@ companion object {
     const val RESULT_OK = -1 // Android's standard RESULT_OK
 }
 
-init {
-        
+init {   
+         Log.d("Killing", "ok")
+        //  killPreviousMainActivity();
+         SignalRegister.registerSignal(this);
          launchMainActivity()
 }
 
+private fun killPreviousMainActivity() {
+        val mainActivityIntent = Intent(context, MainActivity::class.java)
+        // Check if the MainActivity is already running
+        val isMainActivityRunning = appContext.currentActivity?.let { activity ->
+            activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        }?.runningAppProcesses?.any { processInfo ->
+            processInfo.processName == mainActivityIntent.component?.packageName
+        } ?: false
+
+        if (isMainActivityRunning) {
+            // If the activity is running, finish it
+            appContext.currentActivity?.finish()
+        }
+    }
 
 fun launchMainActivity() {
    
     val mainIntent = Intent(context, MainActivity::class.java)
-    context?.let {
-         SignalRegister.registerSignal(this);
-        appContext.currentActivity?.startActivityForResult(mainIntent, REQUEST_CODE)
-    }
+    context.startActivity(mainIntent)
 
 }
 
@@ -66,9 +79,10 @@ override fun postData(data: OCRData) {
         // Dispatch the event with the custom map
         // val dataMap = convertOCRDataToMap(data)
         onOCRCompleted?.invoke(Unit)
+
+        killPreviousMainActivity()
         // Invoke the event with the map data
         Log.d("NowOk", "ok")
-        SignalRegister?.clean()
     } catch (e: Exception) {
         Log.e("postDataError", "Error posting data: ${e.localizedMessage}")
     }

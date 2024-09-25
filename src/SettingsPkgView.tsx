@@ -10,15 +10,13 @@ const NativeView: React.ComponentType<OCRViewProps> =
 export default function SettingsPkgView(props: OCRViewProps) {
   
 
-  const { onOCRCompleted, ...otherProps } = props;
+  const otherProps  = {...props};
   
   
 
     return <NativeView 
-        {...otherProps}
         onOCRCompleted={(d)=> {
-          if(props?.onOCRCompleted)
-           props?.onOCRCompleted(d)
+          console.log("Why it does not works",d) 
         }}
        // Remove this prop from native view
     />;

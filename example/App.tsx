@@ -30,10 +30,10 @@ export default function App() {
        }}>
            <Text>Please Click me and Launc</Text>
        </Pressable>
-      
-      { getOCRCompleted &&
-        <SettingsPkgView  onOCRCompleted={handleOCRCompleted}></SettingsPkgView>
-      }
+        
+          
+          <SettingsPkgView ></SettingsPkgView>
+
 
     </SafeAreaView>
   );

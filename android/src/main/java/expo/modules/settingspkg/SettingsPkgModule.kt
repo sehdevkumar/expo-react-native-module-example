@@ -17,9 +17,6 @@ val cameraEvents = arrayOf(
   "onOCRCompleted"
 )
 class SettingsPkgModule : Module()  {
-    
-    private var cameraActivityView: CameraActivityView? = null
-
 
     override fun definition() = ModuleDefinition {
         Name("SettingsPkg")
@@ -27,7 +24,7 @@ class SettingsPkgModule : Module()  {
 
         // Expose the native view to JavaScript
         View(CameraActivityView::class) {
-           Events("onOCRCompleted")
+           Events(cameraEvents)
             // Define props that can be passed from JavaScript to the native vie
         }
     }
