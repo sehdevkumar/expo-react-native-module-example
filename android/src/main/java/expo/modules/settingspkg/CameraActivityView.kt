@@ -26,7 +26,9 @@ import com.prashd.snacky.Snacky
 
 class CameraActivityView(context: Context, appContext: AppContext) : ExpoView(context, appContext) ,EmitSignal  {
 
- private val onOCRCompleted by EventDispatcher<Unit>()
+ private val onOCRCompleted by EventDispatcher<Map<String, String>>()
+ private val onViewDestoryed by EventDispatcher<Unit>()
+ 
 
    
 
@@ -35,34 +37,33 @@ companion object {
     const val RESULT_OK = -1 // Android's standard RESULT_OK
 }
 
-init {   
-         Log.d("Killing", "ok")
-        //  killPreviousMainActivity();
+ init {   
          SignalRegister.registerSignal(this);
-         launchMainActivity()
+ }
+
+
+fun onPropsHasChaned() {
+      Log.d("Props", "Props has changed")
 }
 
-private fun killPreviousMainActivity() {
-        val mainActivityIntent = Intent(context, MainActivity::class.java)
-        // Check if the MainActivity is already running
-        val isMainActivityRunning = appContext.currentActivity?.let { activity ->
-            activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        }?.runningAppProcesses?.any { processInfo ->
-            processInfo.processName == mainActivityIntent.component?.packageName
-        } ?: false
 
-        if (isMainActivityRunning) {
-            // If the activity is running, finish it
-            Log.d("Killed", "Don't worry")
-            appContext.currentActivity?.finish()
-        }
-    }
+// Try to launch the Activity to capture  and OCR Processing
+fun startPreview() {
+    launchMainActivity()
+}
+
+
+fun onViewDestoryed() {
+     onViewDestoryed?.invoke(Unit)
+}
+
+fun closePreview() {
+      
+}
 
 fun launchMainActivity() {
-   
     val mainIntent = Intent(context, MainActivity::class.java)
     context.startActivity(mainIntent)
-
 }
 
 // Convert OCRData to Map<String, String>
@@ -79,11 +80,7 @@ override fun postData(data: OCRData) {
         Log.d("postData", "Received OCRData: ${data.imageUrl}, ${data.value}")
         // Dispatch the event with the custom map
         // val dataMap = convertOCRDataToMap(data)
-        onOCRCompleted?.invoke(Unit)
-
-
-        // killPreviousMainActivity()
-        // Invoke the event with the map data
+        onOCRCompleted?.invoke(convertOCRDataToMap(data))
         Log.d("NowOk", "ok")
     } catch (e: Exception) {
         Log.e("postDataError", "Error posting data: ${e.localizedMessage}")

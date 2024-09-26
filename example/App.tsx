@@ -1,48 +1,60 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { Alert, Platform, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import SettingsPkgView from 'settings-pkg/SettingsPkgView'
+import {SettingsPkgView} from 'settings-pkg'
+import { OCRViewRef } from 'settings-pkg/SettingsPkg.types';
 
 export default function App() {
 
-  const [getOCRCompleted,setOcrCompleted]= useState<boolean>(false);
-    
+  const [getOCRCompleted,setOcrCompleted]= useState<any>();
+  
 
- const handleOCRCompleted = (data: any) => {
-    // Your logic here, e.g., show a message or handle data
-    console.log('OCR Completed:', data);
-  };
+  
   useEffect(()=> {
+     
+    console.log(getOCRCompleted);
 
- 
-    return ()=> {
-       setOcrCompleted(false)
-    }
+   
 
   },[getOCRCompleted])
 
 
   return (
     <SafeAreaView style={styles.container}>
-       
-       <Pressable onPress={()=> {
-         setOcrCompleted(true)
-       }}>
-           <Text>Please Click me and Launc</Text>
-       </Pressable>
-        
-          
-          <SettingsPkgView ></SettingsPkgView>
-
-
+       <AtaiOCRView></AtaiOCRView>
+       <AtaiOCRView></AtaiOCRView>
     </SafeAreaView>
   );
 }
 
+const AtaiOCRView = memo(()=> {
+  const refView = useRef<OCRViewRef | any>(null);
+    return  (
+        <SafeAreaView style={styles.container}>
+          <Pressable onPress={()=> {
+             refView?.current?.startPreview()
+          }}>
+              <Text>Launch me</Text>
+          </Pressable>
+          {
+            Platform.OS === "android" &&
+            <SettingsPkgView ref={refView} onOCRCompleted={(d)=> {
+               console.log(d,"something")
+            }}
+            onViewDestoryed={()=> {
+                console.log("i am destoryed")
+            }}
+            ></SettingsPkgView>
+
+          }
+    </SafeAreaView>
+    ) 
+})
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#191919',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
